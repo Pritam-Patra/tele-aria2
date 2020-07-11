@@ -55,15 +55,14 @@ export interface GeneralCallbacks {
 }
 
 export interface UserOptions {
-  aria2Server?: string;
-  aria2Key?: string;
-  token?: string;
-  tgBot?: string;
-  tgUser?: number;
-  proxy?: string;
-  maxIndex?: number;
+  aria2Server: string;
+  aria2Key: string;
+  botKey: string;
+  userId: string;
+  proxy: string;
+  maxIndex: number;
   config?: string;
   verbose?: boolean;
 }
 
-export type RequiredOption = 'aria2Server' | 'tgBot' | 'tgUser';
+export type RequiredOption = 'aria2Server' | 'botKey' | 'userId';

@@ -1,8 +1,8 @@
 {
   "name": "tele-aria2",
-  "version": "0.1.0",
+  "version": "0.2.2",
   "description": "Control your Aria2 server through Telegram",
-  "homepage": "https://github.com/HouCoder/tele-aria2#tele-aria2",
+  "homepage": "https://github.com/HouCoder/tele-aria2",
   "main": "./dist/run.js",
   "types": "./dist/typings.d.ts",
   "bin": {
@@ -12,15 +12,12 @@
     "dist"
   ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "eslint \"**/*.ts\"",
+    "test": "mocha -r ts-node/register test/**/*.spec.ts",
     "check": "gts check",
     "clean": "gts clean",
-    "compile": "rm -rf dist && tsc",
+    "compile": "rm -rf dist && tsc && mv dist/src/* dist && rm -rf dist/test dist/src",
     "fix": "gts fix",
-    "prepare": "npm run compile",
-    "pretest": "npm run compile",
-    "posttest": "npm run check"
+    "prepare": "npm run compile"
   },
   "keywords": [
     "Aria2",
@@ -34,29 +31,38 @@
   "author": "HouCoder<hby3387@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "@types/lodash": "^4.14.157",
     "@types/needle": "^2.0.4",
     "@types/uuid": "^8.0.0",
     "@types/websocket": "^1.0.0",
-    "@types/ws": "^7.2.5",
+    "@types/ws": "^7.2.6",
+    "colors": "^1.4.0",
     "commander": "^5.1.0",
     "https-proxy-agent": "^5.0.0",
+    "lodash": "^4.17.15",
     "needle": "^2.5.0",
+    "reconnecting-websocket": "^4.4.0",
     "telegraf": "^3.38.0",
-    "typescript": "^3.9.5",
-    "uuid": "^8.1.0",
-    "winston": "^3.2.1",
-    "ws": "^7.3.0"
+    "typescript": "^3.9.6",
+    "uuid": "^8.2.0",
+    "winston": "^3.3.3",
+    "ws": "^7.3.1"
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^3.2.0",
-    "@typescript-eslint/parser": "^3.2.0",
-    "eslint": "^7.2.0",
+    "@types/chai": "^4.2.11",
+    "@types/mocha": "^7.0.2",
+    "@types/node": "^14.0.14",
+    "@typescript-eslint/eslint-plugin": "^3.5.0",
+    "@typescript-eslint/parser": "^3.5.0",
+    "chai": "^4.2.0",
+    "eslint": "^7.4.0",
     "eslint-config-airbnb-typescript": "^8.0.2",
-    "eslint-plugin-import": "^2.21.2",
-    "eslint-plugin-jsx-a11y": "^6.2.3",
-    "eslint-plugin-react": "^7.20.0",
-    "eslint-plugin-react-hooks": "^4.0.4",
+    "eslint-plugin-import": "^2.22.0",
+    "eslint-plugin-jsx-a11y": "^6.3.1",
+    "eslint-plugin-react": "^7.20.3",
+    "eslint-plugin-react-hooks": "^4.0.5",
     "gts": "^2.0.2",
-    "@types/node": "^14.0.13"
+    "mocha": "^8.0.1",
+    "ts-node": "^8.10.2"
   }
 }

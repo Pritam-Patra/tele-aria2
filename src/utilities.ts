@@ -34,13 +34,14 @@ export function getFilename(task: any): string {
   // BT protocol
   if (task.bittorrent) {
     if (task.bittorrent.info) {
-      // Actual BT download
+      // Actual BT download - data structure https://jsonformatter.org/7901b2
       return task.bittorrent.info.name;
     }
-    // Just the bittorrent file
+    // Just bittorrent file - data structure example https://jsonformatter.org/json-pretty-print/9ac1f8
     return task.files[0].path;
   }
   // HTTP protocol, get filename from download path, https://stackoverflow.com/a/58708800/4480674
+  // data structure example - https://jsonformatter.org/74ea5c
   return task.files[0].path.split('/').splice(-1)[0];
 }
 

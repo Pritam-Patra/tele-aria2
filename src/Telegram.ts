@@ -15,21 +15,21 @@ export default class Telegram {
 
   private logger: winston.Logger;
 
-  private allowedUser: number;
+  private allowedUser: number[];
 
   private maxIndex: number;
 
   private agent: HttpsProxyAgent | undefined;
 
   constructor(options: {
-    tgBot: string;
-    tgUser: number;
+    botKey: string;
+    userId: number[];
     proxy: string | undefined;
     aria2Server: Aria2;
     maxIndex: number;
     logger: winston.Logger;
   }) {
-    this.allowedUser = options.tgUser;
+    this.allowedUser = options.userId;
     this.aria2Server = options.aria2Server;
     this.maxIndex = options.maxIndex;
     this.logger = options.logger;
@@ -39,7 +39,7 @@ export default class Telegram {
     }
 
     this.bot = this.connect2Tg({
-      tgBot: options.tgBot,
+      botKey: options.botKey,
     });
 
     this.registerAria2ServerEvents();
@@ -50,7 +50,7 @@ export default class Telegram {
   }
 
   private connect2Tg(tgSettings: {
-    tgBot: string;
+    botKey: string;
   }): Telegraf<Context> {
     let additionalOptions = {};
 
@@ -63,7 +63,7 @@ export default class Telegram {
       };
     }
 
-    return new Telegraf(tgSettings.tgBot, additionalOptions);
+    return new Telegraf(tgSettings.botKey, additionalOptions);
   }
 
   private authentication(): void {
@@ -76,7 +76,7 @@ export default class Telegram {
         incomingUserId = ctx.update.message?.from?.id;
       }
 
-      if (incomingUserId && this.allowedUser === incomingUserId && next) {
+      if (incomingUserId && this.allowedUser.includes(incomingUserId) && next) {
         return next();
       }
 
@@ -95,7 +95,7 @@ export default class Telegram {
           const fullMessage = `[${fileName}] ${message}`;
 
           // Broadcast the message!
-          this.bot.telegram.sendMessage(this.allowedUser, fullMessage);
+          this.allowedUser.forEach((userId) => this.bot.telegram.sendMessage(userId, fullMessage));
         });
       }
     });
@@ -106,7 +106,7 @@ export default class Telegram {
     this.aria2Server.on('error', (error) => {
       // @ts-ignore This is a customized event, not easy to do it in the correct ts way.
       const message = `Error occured, code: ${error.code}, message: ${error.message}`;
-      this.bot.telegram.sendMessage(this.allowedUser, message);
+      this.allowedUser.forEach((userId) => this.bot.telegram.sendMessage(userId, message));
     });
 
     this.replyOnAria2ServerEvent('downloadStart', 'Download started!');

@@ -3,8 +3,10 @@
 ![Logo](https://raw.githubusercontent.com/HouCoder/tele-aria2/HEAD/images/logo.png)
 
 [![NPM Version][npm-image]][npm-url]
+[![Docker Image Size][docker-size]][docker-url]
 [![GitHub Actions][github-image]][github-url]
 [![TypeScript Style Guide][gts-image]][gts-url]
+[![deps][deps]][deps-url]
 
 The newly rewritten project has a few advantages over [the old one](https://github.com/HouCoder/tele-aria2/tree/legacy-python):
 
@@ -16,22 +18,40 @@ The newly rewritten project has a few advantages over [the old one](https://gith
 
 1. Create your own bot and get its access token by using [@BotFather](https://telegram.me/botfather).
 1. Get your unique user ID - https://stackoverflow.com/a/32777943/4480674.
-1. (Optional) For mainland China users, be sure to have a **HTTP** proxy up and running.
+1. (Optional) Telegram blocked in your region/country? be sure to have a **HTTP** proxy up and running.
 1. `$ npm install tele-aria2 -g`.
 1. `$ tele-aria2 --help` to see how to get started.
 
-## Configuration file example
+## 3 ways to pass parameters
+
+You can pass parameters to tele-aria2 in 3 ways:
+
+1. cli
+2. environment variable
+3. configuration file
+
+Option priorities also follow this order, so cli has the highest priority.
+
+|                             	| Aria2 server    	| Aria2 key    	| Telegram bot key 	| Telegram user id 	| Proxy       	| Max items in range(default 20) 	|
+|-----------------------------	|-----------------	|--------------	|------------------	|------------------	|-------------	|--------------------------------	|
+| cli option                  	| --aria2-server  	| --aria2-key  	| --bot-key        	| --user-id        	| --proxy     	| --max-index                    	|
+| environment variable option 	| ta.aria2-server 	| ta.aria2-key 	| ta.bot-key       	| ta.user-id       	| https_proxy 	| ta.max-index                   	|
+| configuration file option   	| aria2-server    	| aria2-key    	| bot-key          	| user-id          	| proxy       	| max-index                      	|
+
+### configuration file example
 
 ```json
 {
-  "aria2Server": "ws://192.168.1.154:6800/jsonrpc",
-  "aria2Key": "xxx",
+  "aria2-server": "ws://192.168.1.154:6800/jsonrpc",
+  "aria2-key": "xxx",
   "proxy": "http://127.0.0.1:7890",
-  "tgBot": "123456789:xxx",
-  "tgUser": 123456,
-  "maxIndex": 10
+  "bot-key": "123456789:xxx",
+  "user-id": "123456",
+  "max-index": 10
 }
 ```
+
+Need to add more users? no problem, just add `user-id` like this: `"user-id": "123,456,789"`.
 
 ## Usage
 
@@ -53,15 +73,26 @@ No worries, just send your torrent file to chat!
 
 <img src="https://raw.githubusercontent.com/HouCoder/tele-aria2/HEAD/images/tele-aria2.bt.png" alt="start" width="400px">
 
-## TODO
+## Docker
 
-- [ ] Docker image
-- [ ] Unit testing
-- [ ] Auto release to npm
+Run this bot as a Docker container, multi-architecture supported:
 
+```
+$ docker run -it \
+  -v ~/.tele-aria2.json:/tele-aria2/config.json \
+  --net=host \
+  houcoder/tele-aria2
+```
+
+Keep in mind, the `--net=host` option is required if you have `proxy` set in your config file.
+
+[deps]: https://img.shields.io/david/HouCoder/tele-aria2.svg
+[deps-url]: https://david-dm.org/HouCoder/tele-aria2
 [npm-image]: https://img.shields.io/npm/v/tele-aria2.svg
 [npm-url]: https://npmjs.org/package/tele-aria2
 [github-image]: https://github.com/HouCoder/tele-aria2/workflows/ci/badge.svg
 [github-url]: https://github.com/HouCoder/tele-aria2/actions
 [gts-image]: https://img.shields.io/badge/code%20style-google-blueviolet.svg
 [gts-url]: https://github.com/google/gts
+[docker-size]: https://shields.beevelop.com/docker/image/image-size/houcoder/tele-aria2/latest.svg
+[docker-url]: https://hub.docker.com/r/houcoder/tele-aria2
